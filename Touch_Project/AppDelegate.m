@@ -10,8 +10,15 @@
 
 #import "AppDelegate.h"
 #import "GameConfig.h"
-#import "HelloWorldLayer.h"
+//#import "HelloWorldLayer.h"
 #import "RootViewController.h"
+
+#import "Game.h"
+#import "LogoScene.h"
+#import "MainMenu.h"
+#import "TutorScene.h"
+#import "LogoScene.h"
+#import "StoreScene.h"
 
 @implementation AppDelegate
 
@@ -70,8 +77,8 @@
 	[director setOpenGLView:glView];
 	
 //	// Enables High Res mode (Retina Display) on iPhone 4 and maintains low res on all other devices
-//	if( ! [director enableRetinaDisplay:YES] )
-//		CCLOG(@"Retina Display Not supported");
+	if( ! [director enableRetinaDisplay:YES] )
+		CCLOG(@"Retina Display Not supported");
 	
 	//
 	// VERY IMPORTANT:
@@ -87,6 +94,7 @@
 #else
 	[director setDeviceOrientation:kCCDeviceOrientationLandscapeLeft];
 #endif
+    [director setDeviceOrientation:kCCDeviceOrientationPortrait];
 	
 	[director setAnimationInterval:1.0/60];
 	[director setDisplayFPS:YES];
@@ -110,7 +118,12 @@
 	[self removeStartupFlicker];
 	
 	// Run the intro Scene
-	[[CCDirector sharedDirector] runWithScene: [HelloWorldLayer scene]];
+	[[CCDirector sharedDirector] runWithScene: [MainMenu node]];
+    //[[CCDirector sharedDirector] runWithScene: [Random_Test node]];
+    //[[CCDirector sharedDirector] runWithScene: [TutorScene node]];
+    //[[CCDirector sharedDirector] runWithScene: [LogoScene node]];
+    //[[CCDirector sharedDirector] runWithScene: [Game node]];
+    //[[CCDirector sharedDirector] runWithScene: [StoreScene node]];
 }
 
 
@@ -149,6 +162,28 @@
 - (void)applicationSignificantTimeChange:(UIApplication *)application {
 	[[CCDirector sharedDirector] setNextDeltaTimeZero:YES];
 }
+
+#pragma mark -------
+
+-(void)pause
+{
+    if (![self isGameScene]) {
+        [[CCDirector sharedDirector] pause];
+    }
+}
+-(void)resume
+{
+    if (![self isGameScene]) {
+        [[CCDirector sharedDirector] resume];
+    }
+}
+
+
+-(BOOL)isGameScene
+{
+    return [[[CCDirector sharedDirector] runningScene] isKindOfClass:[Game class]];
+}
+
 
 - (void)dealloc {
 	[[CCDirector sharedDirector] end];
